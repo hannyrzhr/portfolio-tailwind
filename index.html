@@ -310,33 +310,36 @@
         <div class="w-full px-4">
           <div class="max-w-xl mx-auto text-center mb-16">
             <h4 class="font-semibold text-lg text-primary mb-2">Contact</h4>
-<h2 class="font-bold text-dark text-3xl mb-4 sm:text-4xl lg:text-5xl">Hubungi Saya</h2>
-<p class="font-medium text-md text-secondary md:text-lg">Jika Anda memiliki pertanyaan atau ingin bekerja sama, jangan ragu untuk menghubungi saya. Saya siap membantu dan berdiskusi mengenai teknologi dan pengembangan sistem informasi.</p>
-
+            <h2 class="font-bold text-dark text-3xl mb-4 sm:text-4xl lg:text-5xl">Hubungi Saya</h2>
+            <p class="font-medium text-md text-secondary md:text-lg">
+              Jika Anda memiliki pertanyaan atau ingin bekerja sama, jangan ragu untuk menghubungi saya. Saya siap membantu dan berdiskusi mengenai teknologi dan pengembangan sistem informasi.
+            </p>
+          </div>
         </div>
 
-        <form>
+        <form name="twl-contact-form">
           <div class="w-full lg:w-2/3 lg:mx-auto">
             <div class="w-full px-4 mb-8">
               <label for="name" class="text-base font-bold text-primary">Nama</label>
-              <input type="text" id="name" class="w-full bg-slate-200 text-dark p-3 rounded-md focus:outline-none focus:ring-primary focus:ring-1 focus:border-primary" />
+              <input type="text" id="name" class="w-full bg-slate-200 text-dark p-3 rounded-md focus:outline-none focus:ring-primary focus:ring-1 focus:border-primary" name="nama" />
             </div>
             <div class="w-full px-4 mb-8">
               <label for="email" class="text-base font-bold text-primary">Email</label>
-              <input type="email" id="email" class="w-full bg-slate-200 text-dark p-3 rounded-md focus:outline-none focus:ring-primary focus:ring-1 focus:border-primary" />
+              <input type="email" id="email" class="w-full bg-slate-200 text-dark p-3 rounded-md focus:outline-none focus:ring-primary focus:ring-1 focus:border-primary" name="email" />
             </div>
             <div class="w-full px-4 mb-8">
               <label for="message" class="text-base font-bold text-primary">Pesan</label>
-              <textarea type="email" id="email" class="w-full bg-slate-200 text-dark p-3 rounded-md focus:outline-none focus:ring-primary focus:ring-1 focus:border-primary h-32"> </textarea>
+              <textarea id="message" class="w-full bg-slate-200 text-dark p-3 rounded-md focus:outline-none focus:ring-primary focus:ring-1 focus:border-primary h-32" name="pesan"></textarea>
             </div>
             <div class="w-full px-4">
-              <button class="text-base font-semibold text-white bg-primary py-3 px-8 rounded-full w-full hover:opacity-80 hover:shadow-lg transition duration-500">Kirim</button>
+              <button type="submit" id="submit-btn" class="text-base font-semibold text-white bg-primary py-3 px-8 rounded-full w-full hover:opacity-80 hover:shadow-lg transition duration-500">Kirim</button>
+              <div id="loading" class="spinner" style="display: none"></div>
             </div>
           </div>
         </form>
       </div>
     </section>
-    <!-- Conatct Section End -->
+    <!-- Contact Section End -->
 
     <!-- Footer Star -->
     <footer class="bg-dark pt-24 pb-12">
@@ -437,5 +440,30 @@
     <!-- Footer End -->
 
     <script src="dist/js/script.js"></script>
+    <script>
+      const scriptURL = "https://script.google.com/macros/s/AKfycbxCodeQHx87KS4o9N4OJRB4Y7yKczvQBGGqx3fn9otzez2NBn60n4XehMTwZFIjXGI72w/exec";
+      const form = document.forms["twl-contact-form"];
+      const submitBtn = document.getElementById("submit-btn");
+      const loadingSpinner = document.getElementById("loading");
+
+      form.addEventListener("submit", (e) => {
+        e.preventDefault();
+        submitBtn.disabled = true;
+        loadingSpinner.style.display = "inline-block";
+
+        fetch(scriptURL, { method: "POST", body: new FormData(form) })
+          .then((response) => {
+            submitBtn.disabled = false;
+            loadingSpinner.style.display = "none";
+            alert("Pesan sudah terkirim!");
+            form.reset();
+          })
+          .catch((error) => {
+            submitBtn.disabled = false;
+            loadingSpinner.style.display = "none";
+            alert("Terjadi kesalahan, pesan tidak terkirim.");
+          });
+      });
+    </script>
   </body>
 </html>
