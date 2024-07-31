@@ -26,7 +26,7 @@ hamburger.addEventListener("click", function () {
 
 // Klik diluar hamburger
 window.addEventListener("click", function (e) {
-  if (e.target != hamburger && e.target != navMenu) {
+  if (e.target !== hamburger && e.target !== navMenu && !navMenu.contains(e.target)) {
     hamburger.classList.remove("hamburger-active");
     navMenu.classList.add("hidden");
   }
@@ -40,20 +40,25 @@ const html = document.querySelector("html");
 function applyDarkMode(isDark) {
   if (isDark) {
     html.classList.add("dark");
-    localStorage.theme = "dark";
+    localStorage.setItem("theme", "dark");
   } else {
     html.classList.remove("dark");
-    localStorage.theme = "light";
+    localStorage.setItem("theme", "light");
   }
 }
 
 // Event listener for toggle click
 darkToggle.addEventListener("click", function () {
-  applyDarkMode(darkToggle.checked);
+  const isDarkMode = darkToggle.checked;
+  applyDarkMode(isDarkMode);
+  console.log("Dark mode toggled:", isDarkMode);
 });
 
 // Set initial mode based on localStorage or system preference
-if (localStorage.theme === "dark" || (!("theme" in localStorage) && window.matchMedia("(prefers-color-scheme: dark)").matches)) {
+const savedTheme = localStorage.getItem("theme");
+const prefersDarkScheme = window.matchMedia("(prefers-color-scheme: dark)").matches;
+
+if (savedTheme === "dark" || (!savedTheme && prefersDarkScheme)) {
   darkToggle.checked = true;
   applyDarkMode(true);
 } else {
